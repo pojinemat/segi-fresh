@@ -1,6 +1,5 @@
 import 'dart:io';
 
-// Function to calculate cost of each item
 double calculateItemCost(String item, int quantity, Map<String, double> prices) {
   if (prices.containsKey(item)) {
     return prices[item]! * quantity;
@@ -10,7 +9,7 @@ double calculateItemCost(String item, int quantity, Map<String, double> prices) 
   }
 }
 
-// Function to generate receipt
+// RECEIPT
 String generateReceipt(
     String storeName,
     Map<String, int> purchasedItems,
@@ -25,7 +24,7 @@ Welcome to $storeName!
 ------------------------------
 """;
 
-  // Item details
+// DETAILS OF PURCHASED ITEMS
   purchasedItems.forEach((item, quantity) {
     double cost = calculateItemCost(item, quantity, prices);
     receipt += "$item x $quantity = RM${cost.toStringAsFixed(2)}\n";
@@ -44,31 +43,33 @@ Thank you for shopping at $storeName!
 }
 
 void main() {
-  // Immutable values
   final String storeName = "Segi Fresh";
   const double taxRate = 0.06;
-
-  // Immutable price list
+// ITEMS AND THEIR PRICES
   final Map<String, double> prices = {
-    "Apple": 2.5,
-    "Milk": 5.0,
-    "Bread": 3.0
+    "Milk": 9.0,
+    "Bread": 4.3,
+    "Butter": 6.5,
+    "Chocolate Milk": 11.0,
+    "Yogurt": 9.0,
+    "Cheese": 12.0,
+    "Margerine": 7.0,
+    "Eggs": 8.0,
+    "Onion": 3.0,
+    "Garlic": 2.5,
+    "Ketchup": 6.5,
+    "Mayonnaise": 10.0,
+    "Mustard": 10.0,
+    "Chilli Sauce": 8.0,
   };
 
-  /*
-  Immutability is useful because:
-  - It prevents accidental modification of important data like prices and tax rate.
-  - Ensures consistency throughout the program.
-  - Makes debugging easier since values do not change unexpectedly.
-  */
 
   print("Welcome to $storeName!");
   print("------------------------------");
 
-  // Store purchased items
+// STORE PURCAHSED ITEMS 
   Map<String, int> purchasedItems = {};
 
-  // Input quantities
   for (String item in prices.keys) {
     stdout.write("$item x ");
     String? input = stdin.readLineSync();
@@ -77,32 +78,28 @@ void main() {
     purchasedItems[item] = quantity;
   }
 
-  // Coupon input (nullable)
   stdout.write("Coupon Code: ");
   String? couponCode = stdin.readLineSync();
 
   print("------------------------------");
 
-  // Calculate subtotal
   double subtotal = 0.0;
   purchasedItems.forEach((item, quantity) {
     subtotal += calculateItemCost(item, quantity, prices);
   });
-
-  // Apply discount
+  
+//DISCOUNT RM5 IF COUPON CODE IS "SAVE5"
   double discount = 0.0;
   if (couponCode != null && couponCode == "SAVE5") {
     discount = 5.0;
   }
 
-  // Calculate tax AFTER discount
+//CALCULATIONS OF TAX AND TOTAL
   double taxableAmount = subtotal - discount;
   double tax = taxableAmount * taxRate;
 
-  // Final total
   double total = taxableAmount + tax;
 
-  // Generate and print receipt
   String receipt = generateReceipt(
       storeName,
       purchasedItems,
